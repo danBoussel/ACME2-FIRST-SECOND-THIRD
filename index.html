@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACME2-FIRST-SECOND-THIRD</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Verdana;
+            flex-direction: column;
+            align-items: center;
+            font-size: 2rem;
+        }
+        
+        #list {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: space-around;
+            justify-content: space-around;
+        }
+        
+        #first,
+        #second,
+        #third {
+            display: flex;
+            flex-direction: column;
+            border: solid 1px red;
+            margin: 2rem;
+            padding: 1rem;
+            width: calc(100%/3-2rem);
+            align-items: center;
+        }
+        
+        #start {
+            font-size: x-large;
+            color: white;
+        }
+        
+        button {
+            border: solid 1px white;
+            background-color: tomato;
+            height: 3rem;
+            width: 12rem;
+        }
+        
+        button[disabled] {
+            background-color: seashell;
+        }
+        
+        ul {
+            padding: 0;
+        }
+        
+        li {
+            padding: 10px;
+            list-style-type: none;
+            border-bottom: solid 1px white;
+            cursor: pointer;
+        }
+        
+        .ready {
+            background-color: tomato;
+        }
+    </style>
+</head>
+
+<body>
+    <h>Acme2 First,Second,Third</h>
+    <div><button id='start'>START</button></div>
+    <div id='list'>
+        <div id='first'>
+            <button class='left'>&lt</button>
+            <button class='right'>&gt</button></div>
+        <div id='second'>
+            <button class='left'>&lt</button>
+            <button class='right'>&gt</button></div>
+        <div id='third'>
+            <button class='left'>&lt</button>
+            <button class='right'>&gt</button></div>
+    </div>
+
+    <script>
+        const slots = ['first ', 'second ', 'third ']
+
+        const users = [{
+            id: 1,
+            name: 'moe ',
+            slot: 'first ',
+            selected: false
+        }, {
+            id: 2,
+            name: 'larry ',
+            slot: 'second ',
+            selected: false
+        }, {
+            id: 3,
+            name: 'curly ',
+            slot: 'third ',
+            selected: false
+        }, {
+            id: 4,
+            name: 'lucy ',
+            slot: 'third ',
+            selected: false
+        }, ];
+
+        //Disable Buttons from First and Third List
+        const disabledLeftButton = document.getElementById('first').getElementsByClassName('left')
+        disabledLeftButton[0].setAttribute('disabled', '')
+
+        const disabledRightButton = document.getElementById('third').getElementsByClassName('right')
+        disabledRightButton[0].setAttribute('disabled', '')
+
+
+
+
+
+        // Adds slotnames to slots (FIRST, SECOND, THIRD)
+        for (let i = 0; i < slots.length; i++) {
+            const ul = document.createElement('ul')
+            const h = document.createElement('h2')
+            const list = document.querySelector(`#${slots[i]}`)
+            h.innerHTML = `${slots[i].toUpperCase()}`
+            list.append(h)
+            list.append(ul)
+        }
+
+
+
+        // Adds users to each slot
+        const addNameToSlot = (user) => {
+            for (let i = 0; i < slots.length; i++) {
+                const list = document.querySelector(`#${slots[i]}`)
+                let ul = list.querySelector('ul')
+                    //  console.log(ul)
+                if (user.slot === slots[i]) {
+                    const li = document.createElement('li')
+                    li.innerHTML = `${user.name.toUpperCase()}`;
+                    ul.append(li);
+                }
+            }
+        }
+
+        users.forEach((user) => addNameToSlot(user))
+
+
+        // const start = document.querySelector('start')
+        // start.addEventListener('click', (ev) => {
+        //     ev.target.start.
+        // });
+
+
+        let names = document.querySelectorAll('li')
+        console.log(names);
+        names.forEach((name) => {
+            name.addEventListener('click', (ev) => {
+                ev.target.classList.toggle('ready')
+
+                users.forEach((user) => {
+                    if (user.name.toUpperCase() === name.innerHTML) user.selected = !user.selected
+                })
+            })
+
+        })
+
+
+
+
+        // move selected names 
+        // const selectedNames = [...document.getElementsByClassName('ready')]
+        // console.log(selectedNames[0])
+        const changeSlot = () => {
+            for (let i = 0; i < slots.length; i++) {
+                let list = document.querySelector(`#${slots[i]}`);
+                console.log(list)
+                const buttons = list.querySelectorAll('button')
+                    // const names = [...list.getElementsByClassName('ready')]
+                    // console.log(...names)
+                buttons.forEach((el) => {
+                    el.addEventListener('click', (ev) => {
+                        if (ev.target.className === 'left') {
+                            users.forEach((user) => {
+                                //console.log(user.selected);
+                                if (user.selected) {
+                                    user.slot = `${slots[i-1]}`
+                                    addNameToSlot(user)
+                                }
+
+                            })
+
+                        }
+
+                    })
+
+                })
+
+            }
+        }
+
+        ////users.forEach((user) => addNameToSlot(user))
+
+
+
+
+
+
+
+
+        //=========================================================================
+        //Add  each slot Name (header name ) FIRST SECOND THIRD 
+        //Add names to slots
+        // const func = () => {
+        //     for (let i = 0; i < slots.length; i++) {
+        //         const h = document.createElement('h2')
+        //         const ul = document.createElement('ul')
+
+        //         const list = document.querySelector(`#${slots[i]}`)
+        //         users.forEach((user) => {
+        //             if (user.slot === slots[i]) {
+        //                 const li = document.createElement('li')
+        //                 h.innerHTML = `${user.slot.toUpperCase()}`;
+        //                 li.innerHTML = `${user.name.toUpperCase()}`;
+        //                 if (user.selected === true) li.className = 'ready'
+        //                 list.append(h);
+        //                 list.append(ul);
+        //                 ul.append(li);
+        //             }
+        //         })
+        //     }
+
+        // }
+
+        //select unselect names
+
+        // const selectedNames = [...document.getElementsByClassName('ready')]
+        // console.log(selectedNames[0])
+        // for (let i = 0; i < slots.length; i++) {
+        //     let list = document.querySelector(`#${slots[i]}`)
+        //     console.log(list)
+        //     const buttons = list.querySelectorAll('button')
+        //     const names = [...list.getElementsByClassName('selected')]
+        //     console.log(...names)
+        //     buttons.forEach((el) => {
+        //         el.addEventListener('click', (ev) => {
+        //             if (ev.target.className === 'left') {
+        //                 const nextLeft = document.querySelector(`#${slots[i-1]}`)
+        //                 console.log(nextLeft, '-----next left')
+
+        //                 nextLeft.append(...names)
+        //             }
+        //         })
+
+        //     })
+
+        // }
+    </script>
+
+</body>
+
+</html>
